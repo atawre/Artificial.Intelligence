@@ -10,7 +10,9 @@ class Node {
 	protected List<Node> children;
     protected static final int NUMBER_OF_ROWS = 5;
     protected static final int NUMBER_OF_COLUMNS = 5;
-
+    protected static final boolean ACTION_PIECE_SELECTION = true;
+    protected static final int pieceId = 0;
+    
 	//the state of this node
 	private QuartoBoard board;
 
@@ -21,6 +23,12 @@ class Node {
 	public Node(QuartoBoard board) {
 		this.children = new ArrayList<Node>();
 		this.board = board;
+	}
+
+	//constructor method
+	public Node() {
+		this.children = new ArrayList<Node>();
+		this.board = new QuartoBoard(5, 5, 32,null);;
 	}
 	
 	//returns the node's name
@@ -47,6 +55,18 @@ class Node {
 	//gets the node's parent node
 	public Node getParentNode() {
 		return this.parent;
+	}
+
+	//generate next set of states for the node.
+	public void generateStates(boolean pieceSelection) {
+        boolean max = false;
+        if(this instanceof MaxNode)
+            max = true;
+        //max ^= true; //toggle node type.
+        if(pieceSelection){
+            System.out.println(this.board.chooseNextPieceNotPlayed());
+        }
+
 	}
 
 	private boolean checkIfGameIsDraw(QuartoBoard b) {
@@ -141,6 +161,12 @@ class Node {
 		}
 */
 	}
+
+	public String getName() {
+		// TODO Auto-generated method stub
+		return "";
+	}
+
 }
 
 /*
@@ -152,7 +178,9 @@ class MinNode extends Node {
 	public MinNode(QuartoBoard board) {
 		super(board);
 	}
-
+	public MinNode() {
+		super();
+	}
 }
 
 /*
@@ -164,6 +192,10 @@ class MaxNode extends Node {
 	public MaxNode(QuartoBoard board) {
 		super(board);
 	}
+	public MaxNode() {
+		super();
+	}
+
 }
 
 /*

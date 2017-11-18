@@ -368,7 +368,4 @@ public class Minimax {
 		}
 		return randomNum;
 	}
-
-
-	
 }

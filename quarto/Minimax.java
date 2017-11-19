@@ -11,7 +11,7 @@ import java.lang.Math;
 **/
 
 public class Minimax {
-	protected static final int DEPTH = 5;
+	protected static final int DEPTH = 4;
 	/*
 	 * The main method()
 	 * 
@@ -33,7 +33,16 @@ public class Minimax {
 		//value returned by the alpha-beta search algorithm
 		int value = alphaBetaSearch(alphaBetaExampleRoot);
 		System.out.println("\nValue of the Alpha-Beta Tree Example: " + value);
-		//Action action = alphaBetaExampleRoot.desiredAction;
+		Action action = alphaBetaExampleRoot.desiredAction;
+		if(action instanceof ActionPiece){
+			System.out.println("Piece ");
+			System.out.println(((ActionPiece) action).piece);
+		}else{
+			System.out.println("Move ");
+			System.out.println(action);
+			System.out.println(((ActionMove) action).c);
+			System.out.println(((ActionMove) action).r);
+		}
 	}
 	
 	/*
@@ -64,7 +73,6 @@ public class Minimax {
 					int h = t.heuristic();
 					t.setValue(h);
 					node.addChild(t);
-					//break;
 					continue;
 				}
 				if (node instanceof MaxNode)
@@ -74,12 +82,10 @@ public class Minimax {
 				c.setPieceId(p.getPieceID());
 				c.setAction(pieceSelection);
 				node.addChild(c);
-				//break;
 			}
 		}
         else{ //move selection.
 			QuartoBoard b = node.getBoard();
-			//boolean flag = false;
 			for(int i = 0; i < Node.NUMBER_OF_ROWS; i++){
 				for(int j = 0; j < Node.NUMBER_OF_COLUMNS; j++) {
 					if(b.isSpaceTaken(i, j))
@@ -89,8 +95,6 @@ public class Minimax {
 						int h = t.heuristic();
 						t.setValue(h);
 						node.addChild(t);
-						//flag = true;
-						//break;
 						continue;
 					}
 					if (node instanceof MaxNode)
@@ -100,11 +104,7 @@ public class Minimax {
 					c.getBoard().insertPieceOnBoard(i, j, node.getPieceId());
 					c.setAction(pieceSelection);
 					node.addChild(c);
-					//flag = true;
-					//break;
 				}
-				//if(flag)
-				//	break;
 			}
 		}
 	}
@@ -143,6 +143,7 @@ public class Minimax {
                 }
                 alpha = Math.max(alpha, value);
  			}
+			node.desiredAction = myPiece;
 			return value;
 		}
 		else{
@@ -165,6 +166,7 @@ public class Minimax {
                 }
                 beta = Math.min(beta, value);
 			}
+			node.desiredAction = myMove;
 			return value;
 		}
 	}
@@ -208,6 +210,7 @@ public class Minimax {
                 beta = Math.min(beta, value);
 			}
 			//System.out.println("Value returned for node " + " is " + value);
+			node.desiredAction = myPiece;
 			return value;
 		}
 		else{
@@ -233,6 +236,7 @@ public class Minimax {
                 alpha = Math.max(alpha, value);
 			}
 			//System.out.println("Value returned for node " + " is " + value);
+			node.desiredAction = myMove;
 			return value;
 		}
 	}

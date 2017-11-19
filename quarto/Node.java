@@ -11,7 +11,7 @@ class Node {
     protected static final int NUMBER_OF_ROWS = 5;
     protected static final int NUMBER_OF_COLUMNS = 5;
     protected static final boolean ACTION_PIECE_SELECTION = true;
-    protected static final int pieceId = 0;
+    protected static int pieceId = 0;
     
 	//the state of this node
 	private QuartoBoard board;
@@ -22,13 +22,22 @@ class Node {
 	//constructor method
 	public Node(QuartoBoard board) {
 		this.children = new ArrayList<Node>();
-		this.board = board;
+		this.board = new QuartoBoard(board);
 	}
 
 	//constructor method
 	public Node() {
 		this.children = new ArrayList<Node>();
-		this.board = new QuartoBoard(5, 5, 32,null);;
+		this.board = new QuartoBoard(5, 5, 32,null);
+	}
+	//changes the node's parent node
+	public void setPieceId(int id) {
+		this.pieceId = id;
+	}
+	
+	//gets the node's parent node
+	public int getPieceId() {
+		return this.pieceId;
 	}
 	
 	//returns the node's name
@@ -66,7 +75,6 @@ class Node {
         if(pieceSelection){
             System.out.println(this.board.chooseNextPieceNotPlayed());
         }
-
 	}
 
 	private boolean checkIfGameIsDraw(QuartoBoard b) {
@@ -210,6 +218,11 @@ class TerminatingNode extends Node {
 		super(board);
 		this.value = value;
 	}
+
+	//constructor method
+	public TerminatingNode(QuartoBoard board) {
+		super(board);
+	}
 	
 	//terminating nodes should not have children
 	public void addChild(Node child) {
@@ -222,6 +235,9 @@ class TerminatingNode extends Node {
 		return this.value;
 	}
 
+	//return the value
+	public void setValue(int h) {
+		this.value = h;
+	}
+
 }
-
-

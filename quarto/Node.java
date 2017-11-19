@@ -11,7 +11,9 @@ class Node {
     protected static final int NUMBER_OF_ROWS = 5;
     protected static final int NUMBER_OF_COLUMNS = 5;
     protected static final boolean ACTION_PIECE_SELECTION = true;
-    protected static int pieceId = 0;
+    protected int pieceId = 0;
+    protected int row = 0;
+    protected int column = 0;
     
 	//the state of this node
 	private QuartoBoard board;
@@ -88,7 +90,7 @@ class Node {
 		for(int i = 0; i < NUMBER_OF_ROWS; i++) {
 			//gameIsWon = this.quartoBoard.checkRow(i);
 			if (b.checkRow(i)) {
-				System.out.println("Win via row: " + (i) + " (zero-indexed)");
+				//System.out.println("Win via row: " + (i) + " (zero-indexed)");
 				return true;
 			}
 
@@ -97,7 +99,7 @@ class Node {
 		for(int i = 0; i < NUMBER_OF_COLUMNS; i++) {
 			//gameIsWon = this.quartoBoard.checkColumn(i);
 			if (b.checkColumn(i)) {
-				System.out.println("Win via column: " + (i) + " (zero-indexed)");
+				//System.out.println("Win via column: " + (i) + " (zero-indexed)");
 				return true;
 			}
 
@@ -105,7 +107,7 @@ class Node {
 
 		//check Diagonals
 		if (b.checkDiagonals()) {
-			System.out.println("Win via diagonal");
+			//System.out.println("Win via diagonal");
 			return true;
 		}
 
@@ -131,12 +133,12 @@ class Node {
             move = cb.chooseRandomPositionNotPlayed(100);
             cb.insertPieceOnBoard(move[0], move[1], pieceID);
             if(checkIfGameIsDraw(cb)){
-		        cb.printBoardState();
-		        System.out.println("\nBoard full!");
+		        //cb.printBoardState();
+		        //System.out.println("\nBoard full!");
                 done = true;
             }else if (checkIfGameIsWon(cb)){
-		        cb.printBoardState();
-		        System.out.println("\nSomebody won!");
+		        //cb.printBoardState();
+		        //System.out.println("\nSomebody won!");
                 done = true;
                 if(this instanceof MaxNode)
                     utility = max?1:-1;
@@ -145,7 +147,7 @@ class Node {
             }
             //String line = scanner.nextLine();
         }
-        System.out.print("utility : "); System.out.println(utility);
+        //System.out.print("utility : "); System.out.println(utility);
         return utility;
     }
 

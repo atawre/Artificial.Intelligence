@@ -11,7 +11,7 @@ import java.lang.Math;
 **/
 
 public class Minimax {
-	protected static final int DEPTH = 2;
+	protected static final int DEPTH = 4;
 	/*
 	 * The main method()
 	 * 
@@ -105,7 +105,7 @@ public class Minimax {
 	 * @return the value of the node.
 	 */
 	public static int maxValue(Node node, int alpha, int beta, boolean pieceSelection, int depth) {
-		System.out.println("maxValue=> generating children.");
+		//System.out.println("maxValue=> generating children.");
 		generateStates(node, pieceSelection, depth);
 		// if the current node is a TerminatingNode
 		if (node instanceof TerminatingNode) {
@@ -121,8 +121,8 @@ public class Minimax {
 
                 value = Math.max(value, minValue(child, alpha, beta, false, depth+1));
                 if(value >= beta){
-                    System.out.println("** All children of " + node.getName() + " after " + child.getName() + " are pruned.");
-                    System.out.println("Value returned for node " + node.getName() + " is " + value);
+                    //System.out.println("** All children of " + node.getName() + " after " + child.getName() + " are pruned.");
+                    //System.out.println("Value returned for node " + node.getName() + " is " + value);
                     return value;
                 }
                 alpha = Math.max(alpha, value);
@@ -138,7 +138,7 @@ public class Minimax {
 				//	System.out.println("** All children of " + node.getName() + " after " + child.getName() + " are pruned.");
 				//	System.out.println("Value returned for node " + node.getName() + " is " + value);
 			}
-			System.out.println("Value returned for node " + " is " + value);
+			//System.out.println("Value returned for node " + " is " + value);
 			return value;
 		}
 	}
@@ -169,8 +169,8 @@ public class Minimax {
 
                 value = Math.min(value, maxValue(child, alpha, beta, true, depth+1));
                 if(value <= alpha){
-                    System.out.println("** All children of " + node.getName() + " after " + child.getName() + " are pruned.");
-                    System.out.println("Value returned for node " + node.getName() + " is " + value);
+                    //System.out.println("** All children of " + node.getName() + " after " + child.getName() + " are pruned.");
+                    //System.out.println("Value returned for node " + node.getName() + " is " + value);
                     return value;
                 }
                 beta = Math.min(beta, value);
@@ -185,7 +185,7 @@ public class Minimax {
 				//	System.out.println("** All children of " + node.getName() + " after " + child.getName() + " are pruned.");
 				//	System.out.println("Value returned for node " + node.getName() + " is " + value);
 			}
-			System.out.println("Value returned for node " + " is " + value);
+			//System.out.println("Value returned for node " + " is " + value);
 			return value;
 		}
 	}

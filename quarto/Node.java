@@ -10,7 +10,7 @@ class Node {
 	protected List<Node> children;
     protected static final int NUMBER_OF_ROWS = 5;
     protected static final int NUMBER_OF_COLUMNS = 5;
-    protected static final boolean ACTION_PIECE_SELECTION = true;
+    protected boolean ACTION_PIECE_SELECTION = true;
     protected int pieceId = 0;
     protected int row = 0;
     protected int column = 0;
@@ -68,17 +68,6 @@ class Node {
 		return this.parent;
 	}
 
-	//generate next set of states for the node.
-	public void generateStates(boolean pieceSelection) {
-        boolean max = false;
-        if(this instanceof MaxNode)
-            max = true;
-        //max ^= true; //toggle node type.
-        if(pieceSelection){
-            System.out.println(this.board.chooseNextPieceNotPlayed());
-        }
-	}
-
 	private boolean checkIfGameIsDraw(QuartoBoard b) {
 		return b.checkIfBoardIsFull();
 	}
@@ -115,9 +104,7 @@ class Node {
 	}
 
 	public int heuristic() {
-        Scanner scanner = new Scanner(System.in);
         QuartoBoard cb = new QuartoBoard(this.board);
-        int turn = 0; //0 - piece, 1 - move.
         int pieceID = 0;
         int[] move = new int[2];
         int utility = 0;
@@ -139,11 +126,17 @@ class Node {
             }else if (checkIfGameIsWon(cb)){
 		        //cb.printBoardState();
 		        //System.out.println("\nSomebody won!");
+            	int empty = 0;
+            	for(int i = 0; i < NUMBER_OF_ROWS; i++)
+        			for(int j = 0; i < NUMBER_OF_COLUMNS; j++)
+        				if(!this.board.isSpaceTaken(i, j))
+        					empty++;
+        					
                 done = true;
                 if(this instanceof MaxNode)
-                    utility = max?1:-1;
+                    utility = max?empty:-empty;
                 else
-                    utility = max?-1:1;
+                    utility = max?-empty:empty;
             }
             //String line = scanner.nextLine();
         }

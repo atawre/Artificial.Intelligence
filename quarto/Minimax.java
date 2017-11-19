@@ -11,7 +11,7 @@ import java.lang.Math;
 **/
 
 public class Minimax {
-
+	protected static final int DEPTH = 2;
 	/*
 	 * The main method()
 	 * 
@@ -25,7 +25,7 @@ public class Minimax {
 	 */
 	public static void main(String[] args) {
 
-		long seed = 0;
+		//long seed = 0;
 
 		//the root of the alpha-beta tree example
 		//Node alphaBetaExampleRoot = buildAlphaBetaTreeExample();
@@ -50,13 +50,16 @@ public class Minimax {
 	}
 
 	public static void generateStates(Node node, boolean pieceSelection, int depth) {
+		if(depth==DEPTH)
+			return;
+		
 		Node c;
 		if(pieceSelection){
 			QuartoBoard b = node.getBoard();
 			for(QuartoPiece p : b.pieces) {
 				if(p.isInPlay())
 					continue;
-				if(depth==4){
+				if(depth==DEPTH-1){
 					TerminatingNode t = new TerminatingNode(b);
 					int h = t.heuristic();
 					t.setValue(h);
@@ -77,7 +80,7 @@ public class Minimax {
 				for(int j = 0; j < Node.NUMBER_OF_COLUMNS; j++) {
 					if(b.isSpaceTaken(i, j))
 						continue;
-					if(depth==4){
+					if(depth==DEPTH-1){
 						TerminatingNode t = new TerminatingNode(b);
 						int h = t.heuristic();
 						t.setValue(h);
@@ -88,9 +91,6 @@ public class Minimax {
 						c = new MaxNode(b);
 					else
 						c = new MinNode(b);
-					//QuartoBoard cb = new QuartoBoard(b);
-					//cb.insertPieceOnBoard(i, j, node.getPieceId());
-					//c = new Node(cb);
 					c.getBoard().insertPieceOnBoard(i, j, node.getPieceId());
 					node.addChild(c);
 				}
@@ -106,6 +106,7 @@ public class Minimax {
 	 */
 	public static int maxValue(Node node, int alpha, int beta, boolean pieceSelection, int depth) {
 		System.out.println("maxValue=> generating children.");
+		generateStates(node, pieceSelection, depth);
 		// if the current node is a TerminatingNode
 		if (node instanceof TerminatingNode) {
 			//return the value assigned to the Terminating node
@@ -152,7 +153,7 @@ public class Minimax {
 	 * @return the value of the node.
 	 */
 	public static int minValue(Node node, int alpha, int beta, boolean pieceSelection, int depth) {
-
+		generateStates(node, pieceSelection, depth);
 		// if the current node is a TerminatingNode
 		if (node instanceof TerminatingNode) {
 			//return the value assigned to the Terminating node

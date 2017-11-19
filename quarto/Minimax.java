@@ -11,7 +11,7 @@ import java.lang.Math;
 **/
 
 public class Minimax {
-	protected static final int DEPTH = 4;
+	protected static final int DEPTH = 5;
 	/*
 	 * The main method()
 	 * 
@@ -32,7 +32,8 @@ public class Minimax {
 		Node alphaBetaExampleRoot = new MaxNode();
 		//value returned by the alpha-beta search algorithm
 		int value = alphaBetaSearch(alphaBetaExampleRoot);
-		System.out.println("\nValue of the Alpha-Beta Tree Example: " + value);		
+		System.out.println("\nValue of the Alpha-Beta Tree Example: " + value);
+		//Action action = alphaBetaExampleRoot.desiredAction;
 	}
 	
 	/*
@@ -52,7 +53,6 @@ public class Minimax {
 	public static void generateStates(Node node, boolean pieceSelection, int depth) {
 		if(depth==DEPTH)
 			return;
-		
 		Node c;
 		if(pieceSelection){
 			QuartoBoard b = node.getBoard();
@@ -64,19 +64,23 @@ public class Minimax {
 					int h = t.heuristic();
 					t.setValue(h);
 					node.addChild(t);
+					//break;
 					continue;
 				}
 				if (node instanceof MaxNode)
 					c = new MinNode(b);
 				else
-					c = new MaxNode(b);				
+					c = new MaxNode(b);
 				c.setPieceId(p.getPieceID());
+				c.setAction(pieceSelection);
 				node.addChild(c);
+				//break;
 			}
 		}
         else{ //move selection.
 			QuartoBoard b = node.getBoard();
-			for(int i = 0; i < Node.NUMBER_OF_ROWS; i++)
+			//boolean flag = false;
+			for(int i = 0; i < Node.NUMBER_OF_ROWS; i++){
 				for(int j = 0; j < Node.NUMBER_OF_COLUMNS; j++) {
 					if(b.isSpaceTaken(i, j))
 						continue;
@@ -85,6 +89,8 @@ public class Minimax {
 						int h = t.heuristic();
 						t.setValue(h);
 						node.addChild(t);
+						//flag = true;
+						//break;
 						continue;
 					}
 					if (node instanceof MaxNode)
@@ -92,8 +98,14 @@ public class Minimax {
 					else
 						c = new MinNode(b);
 					c.getBoard().insertPieceOnBoard(i, j, node.getPieceId());
+					c.setAction(pieceSelection);
 					node.addChild(c);
+					//flag = true;
+					//break;
 				}
+				//if(flag)
+				//	break;
+			}
 		}
 	}
 	/*
@@ -105,14 +117,12 @@ public class Minimax {
 	 * @return the value of the node.
 	 */
 	public static int maxValue(Node node, int alpha, int beta, boolean pieceSelection, int depth) {
-		//System.out.println("maxValue=> generating children.");
 		generateStates(node, pieceSelection, depth);
-		// if the current node is a TerminatingNode
 		if (node instanceof TerminatingNode) {
 			//return the value assigned to the Terminating node
 			return ((TerminatingNode)node).getValue();
 		}
-		else {
+		else if(pieceSelection) {
 			int value = Integer.MIN_VALUE;
 
 			List <Node> children = node.getChildren();
@@ -120,25 +130,29 @@ public class Minimax {
 				Node child = i.next();
 
                 value = Math.max(value, minValue(child, alpha, beta, false, depth+1));
-                if(value >= beta){
+				if(value >= beta) {
                     //System.out.println("** All children of " + node.getName() + " after " + child.getName() + " are pruned.");
                     //System.out.println("Value returned for node " + node.getName() + " is " + value);
                     return value;
                 }
                 alpha = Math.max(alpha, value);
-				
-				// Insert necessary code below, to update the node's value,
-				// as well as alpha and beta.
-				// Use alpha-beta pruning where appropriate.
-				//
-				// When a node's remaining children are to be pruned, use the
-				// following two lines to print information before returning
-				// the value:
-				//
-				//	System.out.println("** All children of " + node.getName() + " after " + child.getName() + " are pruned.");
-				//	System.out.println("Value returned for node " + node.getName() + " is " + value);
+ 			}
+			return value;
+		}
+		else{
+			int value = Integer.MAX_VALUE;
+
+			List<Node> children = node.getChildren();
+			for(Iterator<Node> i = children.iterator(); i.hasNext(); ) {
+				Node child = i.next();
+                value = Math.min(value, maxValue(child, alpha, beta, true, depth+1));
+                if(value <= alpha){
+                    //System.out.println("** All children of " + node.getName() + " after " + child.getName() + " are pruned.");
+                    //System.out.println("Value returned for node " + node.getName() + " is " + value);
+                    return value;
+                }
+                beta = Math.min(beta, value);
 			}
-			//System.out.println("Value returned for node " + " is " + value);
 			return value;
 		}
 	}
@@ -159,31 +173,37 @@ public class Minimax {
 			//return the value assigned to the Terminating node
 			return ((TerminatingNode)node).getValue();
 		}
-
-		else {
+		else if(pieceSelection){
 			int value = Integer.MAX_VALUE;
 
 			List<Node> children = node.getChildren();
 			for(Iterator<Node> i = children.iterator(); i.hasNext(); ) {
 				Node child = i.next();
-
-                value = Math.min(value, maxValue(child, alpha, beta, true, depth+1));
+                value = Math.min(value, maxValue(child, alpha, beta, false, depth+1));
                 if(value <= alpha){
                     //System.out.println("** All children of " + node.getName() + " after " + child.getName() + " are pruned.");
                     //System.out.println("Value returned for node " + node.getName() + " is " + value);
                     return value;
                 }
                 beta = Math.min(beta, value);
-				// Insert necessary code below, to update the node's value,
-				// as well as alpha and beta.
-				// Use alpha-beta pruning where appropriate.
-				//
-				// When a node's remaining children are to be pruned, use the
-				// following two lines to print information before returning
-				// the value:
-				//
-				//	System.out.println("** All children of " + node.getName() + " after " + child.getName() + " are pruned.");
-				//	System.out.println("Value returned for node " + node.getName() + " is " + value);
+			}
+			//System.out.println("Value returned for node " + " is " + value);
+			return value;
+		}
+		else{
+			int value = Integer.MIN_VALUE;
+
+			List <Node> children = node.getChildren();
+			for(Iterator<Node> i = children.iterator(); i.hasNext();) {
+				Node child = i.next();
+
+                value = Math.max(value, minValue(child, alpha, beta, true, depth+1));
+				if(value >= beta) {
+                    //System.out.println("** All children of " + node.getName() + " after " + child.getName() + " are pruned.");
+                    //System.out.println("Value returned for node " + node.getName() + " is " + value);
+                    return value;
+                }
+                alpha = Math.max(alpha, value);
 			}
 			//System.out.println("Value returned for node " + " is " + value);
 			return value;

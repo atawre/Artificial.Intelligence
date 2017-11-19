@@ -5,12 +5,34 @@ import java.util.*;
 	- A string to refer to the name of the node
 	- A reference to the parent node
 */
+
+class Action{
+	public Action(){
+	}
+}
+
+class ActionMove extends Action{
+	int r, c;
+	public ActionMove(int i, int j){
+		super();
+		r=i; c=j;
+	}
+}
+
+class ActionPiece extends Action{
+	int piece;
+	public ActionPiece(int pieceId){
+		super();
+		piece = pieceId;
+	}
+}
+
 class Node {
 
 	protected List<Node> children;
     protected static final int NUMBER_OF_ROWS = 5;
     protected static final int NUMBER_OF_COLUMNS = 5;
-    protected boolean ACTION_PIECE_SELECTION = true;
+    protected boolean PIECE_SELECTION = true;
     protected int pieceId = 0;
     protected int row = 0;
     protected int column = 0;
@@ -20,6 +42,9 @@ class Node {
 
 	//references the parent node
 	protected Node parent;
+	
+	//protected Node desiredAction;
+	protected Action desiredAction;
 	
 	//constructor method
 	public Node(QuartoBoard board) {
@@ -40,6 +65,16 @@ class Node {
 	//gets the node's parent node
 	public int getPieceId() {
 		return this.pieceId;
+	}
+
+	//changes the node's parent node
+	public void setAction(boolean action) {
+		this.PIECE_SELECTION = action;
+	}
+	
+	//gets the node's parent node
+	public boolean getAction() {
+		return this.PIECE_SELECTION;
 	}
 	
 	//returns the node's name
@@ -126,17 +161,17 @@ class Node {
             }else if (checkIfGameIsWon(cb)){
 		        //cb.printBoardState();
 		        //System.out.println("\nSomebody won!");
-            	int empty = 0;
+/*            	int empty = 0;
             	for(int i = 0; i < NUMBER_OF_ROWS; i++)
         			for(int j = 0; i < NUMBER_OF_COLUMNS; j++)
         				if(!this.board.isSpaceTaken(i, j))
         					empty++;
-        					
+ */
                 done = true;
                 if(this instanceof MaxNode)
-                    utility = max?empty:-empty;
+                    utility = max?1:-1;
                 else
-                    utility = max?-empty:empty;
+                    utility = max?-1:1;
             }
             //String line = scanner.nextLine();
         }

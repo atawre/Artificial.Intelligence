@@ -193,7 +193,7 @@ public class Minimax {
 			for(Iterator<Node> i = children.iterator(); i.hasNext(); ) {
 				Node child = i.next();
 				
-				int cMax = minValue(child, alpha, beta, false, depth+1);
+				int cMax = maxValue(child, alpha, beta, false, depth+1);
 				if(cMax < value){
 					value = cMax;
 					myPiece.setAction(child.pieceId);
@@ -218,13 +218,13 @@ public class Minimax {
 			for(Iterator<Node> i = children.iterator(); i.hasNext();) {
 				Node child = i.next();
 				
-				int cMin = minValue(child, alpha, beta, false, depth+1);
+				int cMin = minValue(child, alpha, beta, true, depth+1);
 				if(cMin > value){
 					value = cMin;
 					myMove.setAction(child.row, child.column);
 				}
 
-                value = Math.max(value, minValue(child, alpha, beta, true, depth+1));
+                //value = Math.max(value, minValue(child, alpha, beta, true, depth+1));
 				if(value >= beta) {
                     //System.out.println("** All children of " + node.getName() + " after " + child.getName() + " are pruned.");
                     //System.out.println("Value returned for node " + node.getName() + " is " + value);

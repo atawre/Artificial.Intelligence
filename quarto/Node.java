@@ -13,17 +13,29 @@ class Action{
 
 class ActionMove extends Action{
 	int r, c;
+	public ActionMove(){
+		super();
+	}
 	public ActionMove(int i, int j){
 		super();
 		r=i; c=j;
+	}
+	public void setAction(int i, int j){
+		r=i;c=j;
 	}
 }
 
 class ActionPiece extends Action{
 	int piece;
+	public ActionPiece(){
+		super();
+	}	
 	public ActionPiece(int pieceId){
 		super();
 		piece = pieceId;
+	}
+	public void setAction(int p){
+		piece = p;
 	}
 }
 

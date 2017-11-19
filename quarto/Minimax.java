@@ -124,12 +124,18 @@ public class Minimax {
 		}
 		else if(pieceSelection) {
 			int value = Integer.MIN_VALUE;
-
+			ActionPiece myPiece = new ActionPiece();
+			
 			List <Node> children = node.getChildren();
 			for(Iterator<Node> i = children.iterator(); i.hasNext();) {
 				Node child = i.next();
 
-                value = Math.max(value, minValue(child, alpha, beta, false, depth+1));
+				int cMin = minValue(child, alpha, beta, false, depth+1);
+				if(cMin > value){
+					value = cMin;
+					myPiece.setAction(child.pieceId);
+				}
+                //value = Math.max(value, minValue(child, alpha, beta, false, depth+1));
 				if(value >= beta) {
                     //System.out.println("** All children of " + node.getName() + " after " + child.getName() + " are pruned.");
                     //System.out.println("Value returned for node " + node.getName() + " is " + value);
@@ -141,11 +147,17 @@ public class Minimax {
 		}
 		else{
 			int value = Integer.MAX_VALUE;
-
+			ActionMove myMove = new ActionMove();
+			
 			List<Node> children = node.getChildren();
 			for(Iterator<Node> i = children.iterator(); i.hasNext(); ) {
 				Node child = i.next();
-                value = Math.min(value, maxValue(child, alpha, beta, true, depth+1));
+				int cMax = maxValue(child, alpha, beta, true, depth+1);
+				if(cMax < value){
+					value = cMax;
+					myMove.setAction(child.row, child.column);
+				}
+                //value = Math.min(value, maxValue(child, alpha, beta, true, depth+1));
                 if(value <= alpha){
                     //System.out.println("** All children of " + node.getName() + " after " + child.getName() + " are pruned.");
                     //System.out.println("Value returned for node " + node.getName() + " is " + value);
@@ -175,11 +187,19 @@ public class Minimax {
 		}
 		else if(pieceSelection){
 			int value = Integer.MAX_VALUE;
+			ActionPiece myPiece = new ActionPiece();
 
 			List<Node> children = node.getChildren();
 			for(Iterator<Node> i = children.iterator(); i.hasNext(); ) {
 				Node child = i.next();
-                value = Math.min(value, maxValue(child, alpha, beta, false, depth+1));
+				
+				int cMax = minValue(child, alpha, beta, false, depth+1);
+				if(cMax < value){
+					value = cMax;
+					myPiece.setAction(child.pieceId);
+				}
+				
+                //value = Math.min(value, maxValue(child, alpha, beta, false, depth+1));
                 if(value <= alpha){
                     //System.out.println("** All children of " + node.getName() + " after " + child.getName() + " are pruned.");
                     //System.out.println("Value returned for node " + node.getName() + " is " + value);
@@ -192,10 +212,17 @@ public class Minimax {
 		}
 		else{
 			int value = Integer.MIN_VALUE;
-
+			ActionMove myMove = new ActionMove();
+			
 			List <Node> children = node.getChildren();
 			for(Iterator<Node> i = children.iterator(); i.hasNext();) {
 				Node child = i.next();
+				
+				int cMin = minValue(child, alpha, beta, false, depth+1);
+				if(cMin > value){
+					value = cMin;
+					myMove.setAction(child.row, child.column);
+				}
 
                 value = Math.max(value, minValue(child, alpha, beta, true, depth+1));
 				if(value >= beta) {

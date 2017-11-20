@@ -11,7 +11,7 @@ import java.lang.Math;
 **/
 
 public class Minimax {
-	protected static final int DEPTH = 4;
+	protected static final int DEPTH = 3;
 	/*
 	 * The main method()
 	 * 
@@ -103,6 +103,8 @@ public class Minimax {
 						c = new MinNode(b);
 					c.getBoard().insertPieceOnBoard(i, j, node.getPieceId());
 					c.setAction(pieceSelection);
+					c.row = i;
+					c.column = j;
 					node.addChild(c);
 				}
 			}

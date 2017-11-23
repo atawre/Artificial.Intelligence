@@ -137,17 +137,17 @@ class Node {
             }else if (checkIfGameIsWon(cb)){
 		        //cb.printBoardState();
 		        //System.out.println("\nSomebody won!");
-/*            	int empty = 0;
+            	int empty = 0;
             	for(int i = 0; i < NUMBER_OF_ROWS; i++)
-        			for(int j = 0; i < NUMBER_OF_COLUMNS; j++)
+        			for(int j = 0; j < NUMBER_OF_COLUMNS; j++)
         				if(!this.board.isSpaceTaken(i, j))
         					empty++;
- */
                 done = true;
                 if(this instanceof MaxNode)
-                    utility = max?1:-1;
+                    utility = max?empty:-empty;
                 else
-                    utility = max?-1:1;
+                    utility = max?-empty:empty;
+                //utility *= empty;
             }
             //String line = scanner.nextLine();
         }

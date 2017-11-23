@@ -11,7 +11,7 @@ import java.lang.Math;
 **/
 
 public class Minimax {
-	protected static final int DEPTH = 4;
+	protected static final int DEPTH = 3;
 	/*
 	 * The main method()
 	 * 
@@ -146,12 +146,14 @@ public class Minimax {
 			List<Node> children = node.getChildren();
 			for(Iterator<Node> i = children.iterator(); i.hasNext(); ) {
 				Node child = i.next();
+				//System.out.print("Before " + node.row + "," + node.column);				
 				int cMax = maxValue(child, alpha, beta, true, depth+1);
 				if(cMax > value){
 					value = cMax;
 					node.row = child.row;
 					node.column = child.column;
 				}
+				//System.out.println("  After " + node.row + "," + node.column);
                 //value = Math.min(value, maxValue(child, alpha, beta, true, depth+1));
                 if(value <= alpha){
                     //System.out.println("** All children of " + node.getName() + " after " + child.getName() + " are pruned.");
@@ -186,7 +188,6 @@ public class Minimax {
 			List<Node> children = node.getChildren();
 			for(Iterator<Node> i = children.iterator(); i.hasNext(); ) {
 				Node child = i.next();
-				
 				int cMax = maxValue(child, alpha, beta, false, depth+1);
 				if(cMax < value){
 					value = cMax;
@@ -210,14 +211,14 @@ public class Minimax {
 			List <Node> children = node.getChildren();
 			for(Iterator<Node> i = children.iterator(); i.hasNext();) {
 				Node child = i.next();
-				
+
 				int cMin = minValue(child, alpha, beta, true, depth+1);
-				if(cMin < value){
+
+				if(cMin < value) {
 					value = cMin;
 					node.row = child.row;
 					node.column = child.column;
 				}
-
                 //value = Math.max(value, minValue(child, alpha, beta, true, depth+1));
 				if(value >= beta) {
                     //System.out.println("** All children of " + node.getName() + " after " + child.getName() + " are pruned.");

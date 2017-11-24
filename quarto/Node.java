@@ -140,7 +140,7 @@ class Node {
             	int empty = 0;
             	for(int i = 0; i < NUMBER_OF_ROWS; i++)
         			for(int j = 0; j < NUMBER_OF_COLUMNS; j++)
-        				if(!this.board.isSpaceTaken(i, j))
+        				if(!cb.isSpaceTaken(i, j))
         					empty++;
                 done = true;
                 if(this instanceof MaxNode)
